@@ -46,7 +46,7 @@ void lead_unity(vvi &matrix, int n, int m) {
         matrix[n][i] /= div;
 }
 
-void rref(vvi &matrix, int n, int m) {
+void ref(vvi &matrix, int n, int m) {
     if(n == N)
         return;
     if(m == M) {
@@ -62,7 +62,32 @@ void rref(vvi &matrix, int n, int m) {
         n += 1;
     };
 
-    rref(matrix, n, m + 1);
+    ref(matrix, n, m + 1);
+}
+
+void rref(vvi &matrix, int n, int m) {
+    ref(matrix, n, m);
+    vector<int> index(N, -1);
+
+    rpt(i, 0, N) {
+        rpt(j, 0, M) {
+            if(matrix[i][j] == 1) {
+                index[i] = j;
+                break;
+            };
+        };
+    };
+
+    rpt(i, 1, N) {
+        rpt(k, 1, i + 1) {
+            if(index[N - k] == -1)
+                continue;        
+            int mul{matrix[N - (i + 1)][index[N - k]]};
+
+            rpt(j, index[N - k], M)
+                matrix[N - (i + 1)][j] -= matrix[N - k][j] * mul;
+        };
+    };
 }
 
 void matrix_init(vvi &matrix) {
