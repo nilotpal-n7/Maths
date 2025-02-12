@@ -33,7 +33,7 @@ void lead_sub(vvi &matrix, int n, int m) {
 }
 
 void rest_sub(vvi &matrix, int n, int m) {
-    vi zeros(0, M);
+    vi zeros(M, 0);
 
     rpt(i, n, N) 
         matrix[i] = zeros;
