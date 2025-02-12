@@ -1,6 +1,6 @@
 #include <bits/stdc++.h>
 using namespace std;
-#define rpt(i, a) for(int i{0}; i<a; i++)
+#define rpt(i, a, b) for(int i{a}; i < b; i++)
 #define vvi vector<vector<int>>
 #define vi vector<int>
 
@@ -8,12 +8,11 @@ int lead_swap(vii &matrix, int n, int m) {
     if(matrix[n][m] != 0)
         return 1;
     vi matrix_n = matrix[n];
-    int i_s{n + 1};
     
-    rpt(i, matrix.size() - i_s) {
-        if(matrix[i + i_s][m] != 0) {
-            matrix[n] = matrix[i + i_s];
-            matrix[i + i_s] = matrix_n;
+    rpt(i, n + 1, matrix.size()) {
+        if(matrix[i][m] != 0) {
+            matrix[n] = matrix[i];
+            matrix[i] = matrix_n;
             
             return 1;
         };
@@ -22,26 +21,23 @@ int lead_swap(vii &matrix, int n, int m) {
 }
 
 void lead_sub(vvi &matrix, int n, int m) {
-    int i_s{n}, j_s{m};
-    
-    rpt(i, matrix.size() - i_s) {
-        int sub = matrix[i + i_s][m];
+    rpt(i, n, matrix.size()) {
+        int sub = matrix[i][m];
         
-        rpt(j, matrix[0].size() - j_s)
-            matrix[i + i_s][j + j_s] -= (matrix[n][j + j_s] * sub);
+        rpt(j, m, matrix[0].size())
+            matrix[i][j] -= (matrix[n][j] * sub);
     };
 }
 
 void rest_sub(vvi &matrix, int n, int m) {
     vi zeros(matrix[n].size());
-    int i_s{n};
 
-    rpt(i, matrix.size() - i_s) 
-        matrix[i + i_s] = zeros;
+    rpt(i, n, matrix.size()) 
+        matrix[i] = zeros;
 }
 
 void lead_unity(vvi &matrix, int n, int m) {
-    rpt(i, matrix[0].size()) 
+    rpt(i, 0, matrix[0].size()) 
         matrix[n][i] /= matrix[n][m];
 }
 
@@ -65,8 +61,8 @@ void rref(vvi &matrix, int n, int m) {
 }
 
 void matrix_init(vvi &matrix) {
-    rpt(i, matrix.size()) {
-        rpt(j, matrix[0].size()) {
+    rpt(i, 0, matrix.size()) {
+        rpt(j, 0, matrix[0].size()) {
             int x{};
             cout<<"a"<<i + 1<<j + 1<<": ";
             cin>>x;
@@ -78,8 +74,8 @@ void matrix_init(vvi &matrix) {
 }
 
 void print_matrix(vvi matrix) {
-    rpt(i, matrix.size()) {
-        rpt(j, matrix[0].size())
+    rpt(i, 0, matrix.size()) {
+        rpt(j, 0, matrix[0].size())
             cout<<matrix[i][j]<<", ";
 
         cout<<"\n";
