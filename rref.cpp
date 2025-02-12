@@ -8,6 +8,8 @@ using namespace std;
 int N{0}, M{0};
 
 void matrix_init(vvi &matrix) {
+    cout<<"\n";
+
     rpt(i, 0, N) {
         rpt(j, 0, M) {
             int x{};
@@ -17,7 +19,7 @@ void matrix_init(vvi &matrix) {
         };
     };
 
-    cout<<"\n";
+    cout<<"\n\n";
 }
 
 void print_matrix(vvi matrix) {
@@ -125,3 +127,5 @@ int main() {
 
     return 0;
 }
+
+//4 5 1 3 3 8 5 0 1 3 10 8 0 0 0 -1 -4 0 0 0 2 8
