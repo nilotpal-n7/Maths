@@ -1,15 +1,18 @@
 #include <bits/stdc++.h>
-using namespace std;
+
 #define rpt(i, a, b) for(int i{a}; i < b; i++)
 #define vvi vector<vector<int>>
 #define vi vector<int>
+
+using namespace std;
+int N{0}, M{0};
 
 int lead_swap(vvi &matrix, int n, int m) {
     if(matrix[n][m] != 0)
         return 1;
     vi matrix_n = matrix[n];
     
-    rpt(i, n + 1, matrix.size()) {
+    rpt(i, n + 1, N) {
         if(matrix[i][m] != 0) {
             matrix[n] = matrix[i];
             matrix[i] = matrix_n;
@@ -21,30 +24,30 @@ int lead_swap(vvi &matrix, int n, int m) {
 }
 
 void lead_sub(vvi &matrix, int n, int m) {
-    rpt(i, n, matrix.size()) {
+    rpt(i, n, N) {
         int sub = matrix[i][m];
         
-        rpt(j, m, matrix[0].size())
+        rpt(j, m, M)
             matrix[i][j] -= (matrix[n][j] * sub);
     };
 }
 
 void rest_sub(vvi &matrix, int n, int m) {
-    vi zeros(matrix[0].size());
+    vi zeros(0, M);
 
-    rpt(i, n, matrix.size()) 
+    rpt(i, n, N) 
         matrix[i] = zeros;
 }
 
 void lead_unity(vvi &matrix, int n, int m) {
-    rpt(i, 0, matrix[0].size()) 
+    rpt(i, 0, M) 
         matrix[n][i] /= matrix[n][m];
 }
 
 void rref(vvi &matrix, int n, int m) {
-    if(n == matrix.size())
+    if(n == N)
         return;
-    if(m == matrix[n].size()) {
+    if(m == M) {
         rest_sub(matrix, n , m);
         return;
     };
@@ -61,8 +64,8 @@ void rref(vvi &matrix, int n, int m) {
 }
 
 void matrix_init(vvi &matrix) {
-    rpt(i, 0, matrix.size()) {
-        rpt(j, 0, matrix[0].size()) {
+    rpt(i, 0, N) {
+        rpt(j, 0, M) {
             int x{};
             cout<<"a"<<i + 1<<j + 1<<": ";
             cin>>x;
@@ -74,8 +77,8 @@ void matrix_init(vvi &matrix) {
 }
 
 void print_matrix(vvi matrix) {
-    rpt(i, 0, matrix.size()) {
-        rpt(j, 0, matrix[0].size())
+    rpt(i, 0, N) {
+        rpt(j, 0, M)
             cout<<matrix[i][j]<<", ";
 
         cout<<"\n";
@@ -84,9 +87,8 @@ void print_matrix(vvi matrix) {
 }
 
 int main() {
-    int n{}, m{};
-    cin>>n>>m;
-    vvi matrix(n, vi(m, 0));
+    cin>>N>>M;
+    vvi matrix(N, vi(M, 0));
 
     matrix_init(matrix);
     print_matrix(matrix);
