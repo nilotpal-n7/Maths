@@ -10,6 +10,7 @@ int main() {
     rref(matrix);
     print_matrix(matrix);
 
+    cin.get();
     return 0;
 }
 

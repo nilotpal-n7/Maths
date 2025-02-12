@@ -13,7 +13,7 @@ void matrix_init(vvi &matrix) {
         };
     };
 
-    cout<<"\n";
+    cout<<endl;
 }
 
 void print_matrix(vvi &matrix) {
@@ -24,10 +24,9 @@ void print_matrix(vvi &matrix) {
         rpt(j, 0, c)
             cout<<matrix[i][j]<<", ";
 
-        cout<<"\n";
+        cout<<endl;
     };
-
-    cout<<"\n";
+    cout<<endl;
 }
 
 void matrix_mul(vvi &matrix1, vvi &matrix2, vvi &result) {
