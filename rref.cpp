@@ -24,7 +24,7 @@ int lead_swap(vvi &matrix, int n, int m) {
 }
 
 void lead_sub(vvi &matrix, int n, int m) {
-    rpt(i, n, N) {
+    rpt(i, n + 1, N) {
         int sub = matrix[i][m];
         
         rpt(j, m, M)
@@ -40,7 +40,7 @@ void rest_sub(vvi &matrix, int n, int m) {
 }
 
 void lead_unity(vvi &matrix, int n, int m) {
-    rpt(i, 0, M) 
+    rpt(i, m, M) 
         matrix[n][i] /= matrix[n][m];
 }
 
