@@ -1,13 +1,16 @@
 #include <bits/stdc++.h>
 using namespace std;
 #define rpt(i, a) for(int i{0}; i<a; i++)
+#define vvi vector<vector<int>>
+#define vi vector<int>
 
-int lead_swap(vector<vector<int>> &matrix, int n, int m) {
+int lead_swap(vii &matrix, int n, int m) {
     if(matrix[n][m] != 0)
         return 1;
-    vector<int> matrix_n = matrix[n];
+    vi matrix_n = matrix[n];
 
     for(int i{n + 1}; i < matrix.size(); i++) {
+        
         if(matrix[i][m] != 0) {
             matrix[n] = matrix[i];
             matrix[i] = matrix_n;
@@ -18,7 +21,7 @@ int lead_swap(vector<vector<int>> &matrix, int n, int m) {
     return 0;
 }
 
-void lead_sub(vector<vector<int>> &matrix, int n, int m) {
+void lead_sub(vvi &matrix, int n, int m) {
     for(int i{n}; i < matrix.size(); i++) {
         int sub = matrix[i][m];
         
@@ -27,19 +30,19 @@ void lead_sub(vector<vector<int>> &matrix, int n, int m) {
     };
 }
 
-void rest_sub(vector<vector<int>> &matrix, int n, int m) {
-    vector<int> zeros(matrix[n].size());
+void rest_sub(vvi &matrix, int n, int m) {
+    vi zeros(matrix[n].size());
 
     for(int i{n}; i < matrix.size(); i++) 
         matrix[i] = zeros;
 }
 
-void lead_unity(vector<vector<int>> &matrix, int n, int m) {
+void lead_unity(vvi &matrix, int n, int m) {
     for(int i{0}; i < matrix[n].size(); i++) 
         matrix[n][i] /= matrix[n][m];
 }
 
-void rref(vector<vector<int>> &matrix, int n, int m) {
+void rref(vvi &matrix, int n, int m) {
     if(n == matrix.size())
         return;
     if(m == matrix[n].size()) {
@@ -58,7 +61,7 @@ void rref(vector<vector<int>> &matrix, int n, int m) {
     rref(matrix, n, m + 1);
 }
 
-void matrix_init(vector<vector<int>> &matrix) {
+void matrix_init(vvi &matrix) {
     int n = matrix.size();
     int m = matrix[0].size();
 
@@ -74,7 +77,7 @@ void matrix_init(vector<vector<int>> &matrix) {
     cout<<"\n";
 }
 
-void print_matrix(vector<vector<int>> matrix) {
+void print_matrix(vvi matrix) {
     int n = matrix.size();
     int m = matrix[0].size();
 
@@ -91,7 +94,7 @@ void print_matrix(vector<vector<int>> matrix) {
 int main() {
     int n{}, m{};
     cin>>n>>m;
-    vector<vector<int>> matrix(n, vector<int>(m, 0));
+    vvi matrix(n, vi(m, 0));
 
     matrix_init(matrix);
     print_matrix(matrix);
