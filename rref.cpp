@@ -7,6 +7,29 @@ using namespace std;
 
 int N{0}, M{0};
 
+void matrix_init(vvi &matrix) {
+    rpt(i, 0, N) {
+        rpt(j, 0, M) {
+            int x{};
+            cout<<"a"<<i + 1<<j + 1<<": ";
+            cin>>x;
+            matrix[i][j] = x;
+        };
+    };
+
+    cout<<"\n";
+}
+
+void print_matrix(vvi matrix) {
+    rpt(i, 0, N) {
+        rpt(j, 0, M)
+            cout<<matrix[i][j]<<", ";
+
+        cout<<"\n";
+    };
+    cout<<"\n";
+}
+
 int lead_swap(vvi &matrix, int n, int m) {
     if(matrix[n][m] != 0)
         return 1;
@@ -23,6 +46,13 @@ int lead_swap(vvi &matrix, int n, int m) {
     return 0;
 }
 
+void lead_unity(vvi &matrix, int n, int m) {
+    int div = matrix[n][m];
+    
+    rpt(i, m, M) 
+        matrix[n][i] /= div;
+}
+
 void lead_sub(vvi &matrix, int n, int m) {
     rpt(i, n + 1, N) {
         int sub = matrix[i][m];
@@ -37,13 +67,6 @@ void rest_sub(vvi &matrix, int n, int m) {
 
     rpt(i, n, N) 
         matrix[i] = zeros;
-}
-
-void lead_unity(vvi &matrix, int n, int m) {
-    int div = matrix[n][m];
-    
-    rpt(i, m, M) 
-        matrix[n][i] /= div;
 }
 
 void ref(vvi &matrix, int n, int m) {
@@ -67,6 +90,7 @@ void ref(vvi &matrix, int n, int m) {
 
 void rref(vvi &matrix, int n, int m) {
     ref(matrix, n, m);
+    print_matrix(matrix);
     vector<int> index(N, -1);
 
     rpt(i, 0, N) {
@@ -88,29 +112,6 @@ void rref(vvi &matrix, int n, int m) {
                 matrix[N - (i + 1)][j] -= matrix[N - k][j] * mul;
         };
     };
-}
-
-void matrix_init(vvi &matrix) {
-    rpt(i, 0, N) {
-        rpt(j, 0, M) {
-            int x{};
-            cout<<"a"<<i + 1<<j + 1<<": ";
-            cin>>x;
-            matrix[i][j] = x;
-        };
-    };
-
-    cout<<"\n";
-}
-
-void print_matrix(vvi matrix) {
-    rpt(i, 0, N) {
-        rpt(j, 0, M)
-            cout<<matrix[i][j]<<", ";
-
-        cout<<"\n";
-    };
-    cout<<"\n";
 }
 
 int main() {
