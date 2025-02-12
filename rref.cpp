@@ -19,12 +19,11 @@ int lead_swap(vector<vector<int>> &matrix, int n, int m) {
 }
 
 void lead_sub(vector<vector<int>> &matrix, int n, int m) {
-    if((n + 1) == matrix.size())
-        return;
-
-    for(int i{n + 1}; i < matrix.size(); i++) {
+    for(int i{n}; i < matrix.size(); i++) {
+        int sub = matrix[i][m];
+        
         for(int j{m}; i < matrix[n].size(); i++)
-            matrix[i][j] -= (matrix[n][j] * matrix[i][m]);
+            matrix[i][j] -= (matrix[n][j] * sub);
     };
 }
 
