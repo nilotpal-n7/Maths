@@ -29,11 +29,9 @@ void lead_sub(vector<vector<int>> &matrix, int n, int m) {
 }
 
 void rest_sub(vector<vector<int>> &matrix, int n, int m) {
-    if((n + 1) == matrix.size())
-        return;
     vector<int> zeros(matrix[n].size());
 
-    for(int i{n + 1}; i < matrix.size(); i++) 
+    for(int i{n}; i < matrix.size(); i++) 
         matrix[i] = zeros;
 }
 
