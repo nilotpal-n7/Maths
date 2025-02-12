@@ -8,12 +8,12 @@ int lead_swap(vii &matrix, int n, int m) {
     if(matrix[n][m] != 0)
         return 1;
     vi matrix_n = matrix[n];
-
-    for(int i{n + 1}; i < matrix.size(); i++) {
-        
-        if(matrix[i][m] != 0) {
-            matrix[n] = matrix[i];
-            matrix[i] = matrix_n;
+    int i_s{n + 1};
+    
+    rpt(i, matrix.size() - i_s) {
+        if(matrix[i + i_s][m] != 0) {
+            matrix[n] = matrix[i + i_s];
+            matrix[i + i_s] = matrix_n;
             return 1;
         };
     };
@@ -22,23 +22,26 @@ int lead_swap(vii &matrix, int n, int m) {
 }
 
 void lead_sub(vvi &matrix, int n, int m) {
-    for(int i{n}; i < matrix.size(); i++) {
-        int sub = matrix[i][m];
+    int i_s{n}, j_s{m};
+    
+    rpt(i, matrix.size() - i_s) {
+        int sub = matrix[i + i_s][m];
         
-        for(int j{m}; i < matrix[n].size(); i++)
-            matrix[i][j] -= (matrix[n][j] * sub);
+        rpt(j, matrix[n].size() - j_s)
+            matrix[i + i_s][j + j_s] -= (matrix[n][j + j_s] * sub);
     };
 }
 
 void rest_sub(vvi &matrix, int n, int m) {
     vi zeros(matrix[n].size());
+    int i_s{n};
 
-    for(int i{n}; i < matrix.size(); i++) 
-        matrix[i] = zeros;
+    rpt(i, matrix.size() - i_s) 
+        matrix[i + i_s] = zeros;
 }
 
 void lead_unity(vvi &matrix, int n, int m) {
-    for(int i{0}; i < matrix[n].size(); i++) 
+    rpt(i, matrix[n].size()) 
         matrix[n][i] /= matrix[n][m];
 }
 
