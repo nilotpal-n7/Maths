@@ -58,16 +58,16 @@ void rref(vector<vector<int>> &matrix, int n, int m) {
     rref(matrix, n, m + 1);
 }
 
-void matrix_init(vector<vector<int>> &matrix0) {
-    int n = matrix0.size();
-    int m = matrix0[0].size();
+void matrix_init(vector<vector<int>> &matrix) {
+    int n = matrix.size();
+    int m = matrix[0].size();
 
     rpt(i, n) {
         rpt(j, m) {
             int x{};
             cout<<"a"<<i + 1<<j + 1<<": ";
             cin>>x;
-            matrix0[i][j] = x;
+            matrix[i][j] = x;
         };
     };
 
