@@ -4,7 +4,7 @@ using namespace std;
 #define vvi vector<vector<int>>
 #define vi vector<int>
 
-int lead_swap(vii &matrix, int n, int m) {
+int lead_swap(vvi &matrix, int n, int m) {
     if(matrix[n][m] != 0)
         return 1;
     vi matrix_n = matrix[n];
@@ -30,7 +30,7 @@ void lead_sub(vvi &matrix, int n, int m) {
 }
 
 void rest_sub(vvi &matrix, int n, int m) {
-    vi zeros(matrix[n].size());
+    vi zeros(matrix[0].size());
 
     rpt(i, n, matrix.size()) 
         matrix[i] = zeros;
