@@ -14,10 +14,10 @@ int lead_swap(vii &matrix, int n, int m) {
         if(matrix[i + i_s][m] != 0) {
             matrix[n] = matrix[i + i_s];
             matrix[i + i_s] = matrix_n;
+            
             return 1;
         };
     };
-
     return 0;
 }
 
@@ -27,7 +27,7 @@ void lead_sub(vvi &matrix, int n, int m) {
     rpt(i, matrix.size() - i_s) {
         int sub = matrix[i + i_s][m];
         
-        rpt(j, matrix[n].size() - j_s)
+        rpt(j, matrix[0].size() - j_s)
             matrix[i + i_s][j + j_s] -= (matrix[n][j + j_s] * sub);
     };
 }
@@ -41,7 +41,7 @@ void rest_sub(vvi &matrix, int n, int m) {
 }
 
 void lead_unity(vvi &matrix, int n, int m) {
-    rpt(i, matrix[n].size()) 
+    rpt(i, matrix[0].size()) 
         matrix[n][i] /= matrix[n][m];
 }
 
@@ -65,11 +65,8 @@ void rref(vvi &matrix, int n, int m) {
 }
 
 void matrix_init(vvi &matrix) {
-    int n = matrix.size();
-    int m = matrix[0].size();
-
-    rpt(i, n) {
-        rpt(j, m) {
+    rpt(i, matrix.size()) {
+        rpt(j, matrix[0].size()) {
             int x{};
             cout<<"a"<<i + 1<<j + 1<<": ";
             cin>>x;
@@ -81,16 +78,12 @@ void matrix_init(vvi &matrix) {
 }
 
 void print_matrix(vvi matrix) {
-    int n = matrix.size();
-    int m = matrix[0].size();
-
-    rpt(i, n) {
-        rpt(j, m)
+    rpt(i, matrix.size()) {
+        rpt(j, matrix[0].size())
             cout<<matrix[i][j]<<", ";
 
         cout<<"\n";
     };
-
     cout<<"\n";
 }
 
