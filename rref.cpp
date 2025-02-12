@@ -40,8 +40,10 @@ void rest_sub(vvi &matrix, int n, int m) {
 }
 
 void lead_unity(vvi &matrix, int n, int m) {
+    int div = matrix[n][m];
+    
     rpt(i, m, M) 
-        matrix[n][i] /= matrix[n][m];
+        matrix[n][i] /= div;
 }
 
 void rref(vvi &matrix, int n, int m) {
