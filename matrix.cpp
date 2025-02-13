@@ -1,5 +1,4 @@
 #include "matrix.h"
-#include "complex.h"
 
 int dim_r(vvf &matrix) {
     int r = matrix.size();
@@ -11,16 +10,16 @@ int dim_c(vvf &matrix) {
     return c;
 }
 
-int dim(vvf &matrix) {
-    int r = dim_r(matrix);
-    int c = dim_c(matrix);
-    return r, c;
+void dim(vvf &matrix, int *r, int *c) {
+    *r = dim_r(matrix);
+    *c = dim_c(matrix);
 }
 
 vvf matrix_init() {
     int r{}, c{};
     cout<<"r, c: ";
     cin>>r>>c;
+    cout<<endl;
     vvf matrix(r, vf(c, 0));
 
     rpt(i, 0, r) {
@@ -31,25 +30,27 @@ vvf matrix_init() {
             matrix[i][j] = x;
         };
     };
-
+    
+    cout<<"\n"<<endl;
     return matrix;
 }
 
 void print_matrix(vvf &matrix) {
-    int r, c = dim(matrix);
+    int r{}, c{};
+    dim(matrix, &r, &c);
 
     rpt(i, 0, r) {
         rpt(j, 0, c)
             cout<<matrix[i][j]<<", ";
-
         cout<<endl;
     };
     cout<<endl;
 }
 
 bool isequal(vvf &matrix1, vvf &matrix2) {
-    int r1, c1 = dim(matrix1);
-    int r2, c2 = dim(matrix2);
+    int r1{}, c1{}, r2{}, c2{};
+    dim(matrix1, &r1, &c1);
+    dim(matrix2, &r2, &c2);
 
     if((r1 != r2) or (c1 != c2))
         return false;
@@ -65,7 +66,8 @@ bool isequal(vvf &matrix1, vvf &matrix2) {
 }
 
 vvf transpose(vvf &matrix) {
-    int r, c = dim(matrix);
+    int r{}, c{};
+    dim(matrix, &r, &c);
     vvf result(c, vf(r, 0));
 
     rpt(i, 0, r) {
@@ -77,7 +79,8 @@ vvf transpose(vvf &matrix) {
 }
 
 vvf matrix_conjugate(vvf &matrix) {
-    int r, c = dim(matrix);
+    int r{}, c{};
+    dim(matrix, &r, &c);
     vvf result(r, vf(c, 0));
 
     rpt(i, 0, r) {
@@ -89,8 +92,9 @@ vvf matrix_conjugate(vvf &matrix) {
 }
 
 vvf matrix_mul(vvf &matrix1, vvf &matrix2) {
-    int r1, c1 = dim(matrix1);
-    int r2, c2 = dim(matrix2);
+    int r1{}, c1{}, r2{}, c2{};
+    dim(matrix1, &r1, &c1);
+    dim(matrix2, &r2, &c2);
 
     if(c1 == r2) {
         vvf result(r1, vf(c2, 0));
@@ -112,12 +116,12 @@ vvf matrix_mul(vvf &matrix1, vvf &matrix2) {
 }
 
 vvf dot(vvf &matrix1, vvf &matrix2) {
-    int c1 = dim_c(matrix1);
+    int r1 = dim_r(matrix1);
     int r2 = dim_r(matrix2);
 
-    if(c1 == r2) {
+    if(r1 == r2) {
         vvf t_result = transpose(matrix1);
-        vvf result = matrix_mul(matrix1, matrix2);
+        vvf result = matrix_mul(t_result, matrix2);
         
         return result;
     }
@@ -165,7 +169,8 @@ void rest_sub(vvf &matrix, int n, int m, int r, int c) {
 }
 
 vvf ref(vvf &matrix, int n, int m) {
-    int r, c = dim(matrix);
+    int r{}, c{};
+    dim(matrix, &r, &c);
     vvf result = matrix;
 
     if(n == r)
@@ -188,7 +193,8 @@ vvf ref(vvf &matrix, int n, int m) {
 }
 
 vvf rref(vvf &matrix) {
-    int r, c = dim(matrix);
+    int r{}, c{};
+    dim(matrix, &r, &c);
     vvf result = ref(matrix, 0, 0);
     vi index(r, -1);
 

@@ -8,17 +8,26 @@ int main() {
     print_matrix(matrix);
     vvf result = rref(matrix);
     print_matrix(result);
-    result = dot(matrix, result);
+    result = transpose(matrix);
+    print_matrix(result);
+    
+    try{
+        result = dot(matrix, matrix);
+        print_matrix(result);
+    }
+    catch(const char *err) {
+        cout<<"Dot Error: "<<err<<"\n"<<endl;
+    };
 
     Complex c1 = (2.01 + i*-3.5) * (2.01 + i*3);
     cout<<c1<<"\nPhase: "<<c1.phase()<<endl;
     cin>>c1;
-    cout<<c1<<"\nPhase: "<<c1.conjugate()<<endl;
+    cout<<c1<<"\nConjugate: "<<c1.conjugate()<<endl;
 
     Quaternion c2 = (2.01 + q*-3.5 + j*2.3 + k*-3.33) * (2.01 + q*3 + j*3.2 + k*-3);
-    cout<<c2<<"\nPhase: "<<c2.unit()<<endl;
+    cout<<c2<<"\nUnit: "<<c2.unit()<<endl;
     cin>>c2;
-    cout<<c2<<"\nPhase: "<<c2.conjugate()<<endl;
+    cout<<c2<<"\nConjugate: "<<c2.conjugate()<<endl;
 
     cin.get();
     return 0;

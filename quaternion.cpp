@@ -1,6 +1,6 @@
 #include "quaternion.h"
 
-Quaternion::Quaternion(float real, float imag, float imag_j, float imag_k) {
+Quaternion::Quaternion(float real, float imag_i, float imag_j, float imag_k) {
     this->real = real;
     this->imag_i = imag_i;
     this->imag_j = imag_j;
