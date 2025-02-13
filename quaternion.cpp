@@ -108,12 +108,12 @@ Quaternion stoq(string& s) {
     };
 
     if(index[0] < s_len - 3) {
-        rpt(x, index[0] + 3, index[1])
+        rpt(x, index[0] + 3, index[1] + 1)
             imag_i += s[x];
     };
 
     if(index[1] < s_len - 3) {
-        rpt(x, index[1] + 3, index[2])
+        rpt(x, index[1] + 3, index[2] + 1)
             imag_j += s[x];
     };
 
