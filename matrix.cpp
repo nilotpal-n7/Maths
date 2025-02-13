@@ -17,8 +17,11 @@ int dim(vvf &matrix) {
     return r, c;
 }
 
-void matrix_init(vvf &matrix) {
-    int r, c = dim(matrix);
+vvf matrix_init() {
+    int r{}, c{};
+    cout<<"r, c: ";
+    cin>>r>>c;
+    vvf matrix(r, vf(c, 0));
 
     rpt(i, 0, r) {
         rpt(j, 0, c) {
@@ -29,7 +32,7 @@ void matrix_init(vvf &matrix) {
         };
     };
 
-    cout<<endl;
+    return matrix;
 }
 
 void print_matrix(vvf &matrix) {

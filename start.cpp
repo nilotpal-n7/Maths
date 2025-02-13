@@ -3,11 +3,8 @@
 #include "quaternion.h"
 
 int main() {
-    int N{}, M{};
-    cin>>N>>M;
-    vvf matrix(N, vf(M, 0));
     //4 5 1 3 3 8 5 0 1 3 10 8 0 0 0 -1 -4 0 0 0 2 8
-    matrix_init(matrix);
+    vvf matrix = matrix_init();
     print_matrix(matrix);
     vvf result = rref(matrix);
     print_matrix(result);
