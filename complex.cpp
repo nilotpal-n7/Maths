@@ -1,4 +1,3 @@
-#include "essentials.h"
 #include "complex.h"
 
 Complex::Complex(float real, float imag) {
@@ -6,9 +5,10 @@ Complex::Complex(float real, float imag) {
     this->imag = imag;
 };
 
-Complex Complex::operator=(float r) {
-    this->real = r;
-    return Complex(real, imag);
+Complex Complex::operator=(float a) {
+    this->real = a;
+    this->imag = 0;
+    return Complex(this->real, this->imag);
 };
 
 float Complex::modulus2() {

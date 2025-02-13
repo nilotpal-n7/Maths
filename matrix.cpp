@@ -1,4 +1,3 @@
-#include "essentials.h"
 #include "matrix.h"
 
 void matrix_init(vvf &matrix) {
