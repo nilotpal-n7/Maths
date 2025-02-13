@@ -16,7 +16,7 @@ int main() {
         print_matrix(result);
     }
     catch(const char *err) {
-        cout<<"Dot Error: "<<err<<"\n"<<endl;
+        cout<<"Error-> "<<err<<"\n"<<endl;
     };
 
     Complex c1 = (2.01 + i*-3.5) * (2.01 + i*3);

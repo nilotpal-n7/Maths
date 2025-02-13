@@ -112,7 +112,7 @@ vvf matrix_mul(vvf &matrix1, vvf &matrix2) {
         return result;
     }
     else
-        throw "Dimension Error!";
+        throw "Dimension Error: Mul(c1 != r2)";
 }
 
 vvf dot(vvf &matrix1, vvf &matrix2) {
@@ -126,7 +126,7 @@ vvf dot(vvf &matrix1, vvf &matrix2) {
         return result;
     }
     else
-        throw "Dimension Error";
+        throw "Dimension Error: Dot(r1 != r2)";
 }
 
 int lead_swap(vvf &matrix, int n, int m, int r, int c) {
