@@ -1,13 +1,29 @@
 #include "matrix.h"
+#include "complex.h"
+
+int dim_r(vvf &matrix) {
+    int r = matrix.size();
+    return r;
+}
+
+int dim_c(vvf &matrix) {
+    int c = matrix[0].size();
+    return c;
+}
+
+int dim(vvf &matrix) {
+    int r = dim_r(matrix);
+    int c = dim_c(matrix);
+    return r, c;
+}
 
 void matrix_init(vvf &matrix) {
-    int r = matrix.size();
-    int c = matrix[0].size();
+    int r, c = dim(matrix);
 
     rpt(i, 0, r) {
         rpt(j, 0, c) {
             float x{};
-            cout<<"a"<<i<<j<<": ";
+            cout<<"a"<<i + 1<<j + 1<<": ";
             cin>>x;
             matrix[i][j] = x;
         };
@@ -17,8 +33,7 @@ void matrix_init(vvf &matrix) {
 }
 
 void print_matrix(vvf &matrix) {
-    int r = matrix.size();
-    int c = matrix[0].size();
+    int r, c = dim(matrix);
 
     rpt(i, 0, r) {
         rpt(j, 0, c)
@@ -29,15 +44,54 @@ void print_matrix(vvf &matrix) {
     cout<<endl;
 }
 
-void matrix_mul(vvf &matrix1, vvf &matrix2, vvf &result) {
-    int r1 = matrix1.size();
-    int c1 = matrix1[0].size();
-    int r2 = matrix2.size();
-    int c2 = matrix2[0].size();
+bool isequal(vvf &matrix1, vvf &matrix2) {
+    int r1, c1 = dim(matrix1);
+    int r2, c2 = dim(matrix2);
 
-    if(c1 != r2)
-        cout<<"Dimension Error!";
-    else {
+    if((r1 != r2) or (c1 != c2))
+        return false;
+
+    rpt(i, 0, r1) {
+        rpt(j , 0, c2) {
+            if(matrix1[i][j] != matrix2[i][j])
+                return false;
+        };
+    };
+
+    return true;
+}
+
+vvf transpose(vvf &matrix) {
+    int r, c = dim(matrix);
+    vvf result(c, vf(r, 0));
+
+    rpt(i, 0, r) {
+        rpt(j, 0, c)
+            result[j][i] = matrix[i][j];
+    };
+
+    return result;
+}
+
+vvf matrix_conjugate(vvf &matrix) {
+    int r, c = dim(matrix);
+    vvf result(r, vf(c, 0));
+
+    rpt(i, 0, r) {
+        rpt(j, 0, c)
+            result[i][j] = matrix[i][j];
+    };
+
+    return result;
+}
+
+vvf matrix_mul(vvf &matrix1, vvf &matrix2) {
+    int r1, c1 = dim(matrix1);
+    int r2, c2 = dim(matrix2);
+
+    if(c1 == r2) {
+        vvf result(r1, vf(c2, 0));
+
         rpt(i, 0, r1) {
             rpt(j, 0, c2) {
                 int sum{0};
@@ -47,7 +101,25 @@ void matrix_mul(vvf &matrix1, vvf &matrix2, vvf &result) {
                 result[i][j] = sum;
             };
         };
-    };
+
+        return result;
+    }
+    else
+        throw "Dimension Error!";
+}
+
+vvf dot(vvf &matrix1, vvf &matrix2) {
+    int c1 = dim_c(matrix1);
+    int r2 = dim_r(matrix2);
+
+    if(c1 == r2) {
+        vvf t_result = transpose(matrix1);
+        vvf result = matrix_mul(matrix1, matrix2);
+        
+        return result;
+    }
+    else
+        throw "Dimension Error";
 }
 
 int lead_swap(vvf &matrix, int n, int m, int r, int c) {
@@ -89,36 +161,37 @@ void rest_sub(vvf &matrix, int n, int m, int r, int c) {
         matrix[i] = zeros;
 }
 
-void ref(vvf &matrix, int n, int m, int r, int c) {
+vvf ref(vvf &matrix, int n, int m) {
+    int r, c = dim(matrix);
+    vvf result = matrix;
+
     if(n == r)
-        return;
+        return result;
     if(m == c) {
-        rest_sub(matrix, n , m, r, c);
-        return;
+        rest_sub(result, n , m, r, c);
+        return result;
     };
 
-    int returned = lead_swap(matrix, n, m, r, c);
+    int returned = lead_swap(result, n, m, r, c);
 
     if(returned) {
-        lead_unity(matrix, n ,m, r, c);
-        lead_sub(matrix, n, m, r, c);
+        lead_unity(result, n ,m, r, c);
+        lead_sub(result, n, m, r, c);
         n += 1;
     };
 
-    ref(matrix, n, m + 1, r, c);
+    result = ref(result, n, m + 1);
+    return result;
 }
 
-void rref(vvf &matrix) {
-    int r = matrix.size();
-    int c = matrix[0].size();
-
-    ref(matrix, 0, 0, r, c);
-    print_matrix(matrix);
+vvf rref(vvf &matrix) {
+    int r, c = dim(matrix);
+    vvf result = ref(matrix, 0, 0);
     vi index(r, -1);
 
     rpt(i, 0, r) {
         rpt(j, 0, c) {
-            if(matrix[i][j] == 1) {
+            if(result[i][j] == 1) {
                 index[i] = j;
                 break;
             };
@@ -129,10 +202,12 @@ void rref(vvf &matrix) {
         rpt(k, 1, i + 1) {
             if(index[r - k] == -1)
                 continue;        
-            float mul{matrix[r - (i + 1)][index[r - k]]};
+            float mul{result[r - (i + 1)][index[r - k]]};
 
             rpt(j, index[r - k], c)
-                matrix[r - (i + 1)][j] -= matrix[r - k][j] * mul;
+                result[r - (i + 1)][j] -= result[r - k][j] * mul;
         };
     };
+
+    return result;
 }

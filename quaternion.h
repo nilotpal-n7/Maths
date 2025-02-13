@@ -10,7 +10,7 @@ struct Quaternion{
     Quaternion unit();
 };
 
-const Quaternion i = Quaternion(0, 1, 0, 0);
+const Quaternion q = Quaternion(0, 1, 0, 0);
 const Quaternion j = Quaternion(0, 0, 1, 0);
 const Quaternion k = Quaternion(0, 0, 0, 1);
 
@@ -27,7 +27,7 @@ Quaternion operator-(Quaternion a, Quaternion b);
 Quaternion operator*(Quaternion a, Quaternion b);
 Quaternion operator/(Quaternion a, Quaternion b);
 
-Quaternion stoc(string& s);
+Quaternion stoq(string& s);
 bool operator==(Quaternion a, Quaternion b);
 
 ostream& operator<<(ostream& out, Quaternion z);

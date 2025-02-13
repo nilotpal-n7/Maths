@@ -16,7 +16,8 @@ float Complex::modulus2() {
 };
 
 float Complex::modulus() {
-    return sqrt(modulus2());
+    Complex v(this->real, this->imag);
+    return sqrt(v.modulus2());
 };
 
 float Complex::phase() {
