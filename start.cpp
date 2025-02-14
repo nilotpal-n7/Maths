@@ -1,5 +1,4 @@
 #include "c_matrix.h"
-#include "quaternion.h"
 
 int main() {
     Matrix matrix(0, 0);
