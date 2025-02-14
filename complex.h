@@ -2,7 +2,7 @@
 
 struct Complex {
     float real{}, imag{};
-    Complex(float real, float imag);
+    Complex(float real=0, float imag=0);
     Complex operator=(float r);
     float modulus2();
     float modulus();

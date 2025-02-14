@@ -1,6 +1,6 @@
 #include "complex.h"
 
-Complex::Complex(float real, float imag) {
+Complex::Complex(float real=0, float imag=0) {
     this->real = real;
     this->imag = imag;
 };

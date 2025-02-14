@@ -2,7 +2,7 @@
 
 struct Quaternion{
     float real{}, imag_i{}, imag_j{}, imag_k{};
-    Quaternion(float real, float imag_i, float imag_j, float imag_k);
+    Quaternion(float real=0, float imag_i=0, float imag_j=0, float imag_k=0);
     Quaternion operator=(float a);
     float modulus2();
     float modulus();
