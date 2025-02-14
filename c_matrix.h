@@ -14,6 +14,7 @@ struct Matrix {
     string dim();
     Matrix transpose();
     Matrix matrix_conjugate();
+    Matrix dagger();
 };
 
 bool isequal(Matrix &matrix1, Matrix &matrix2);

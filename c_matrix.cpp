@@ -3,6 +3,7 @@
 Matrix::Matrix(int r, int c) {
     this->r = r;
     this->c = c;
+    this->matrix = vvc(r, vc(c, Complex(0, 0)));
 
     if((r == 0) or (c == 0))
         _init_();
@@ -12,6 +13,7 @@ void Matrix::_init_() {
     cout<<"r, c: ";
     cin>>this->r>>this->c;
     cout<<endl;
+    this->matrix = vvc(r, vc(c, Complex(0, 0)));
     Complex x(0, 0);
 
     rpt(k, 0, r) {
@@ -69,6 +71,15 @@ Matrix Matrix::matrix_conjugate() {
     return result;
 }
 
+Matrix Matrix::dagger() {
+    Matrix result(r, c);
+    result.matrix = this->matrix;
+    result = result.transpose();
+    result = result.matrix_conjugate();
+    
+    return result;
+}
+
 bool isequal(Matrix &matrix1, Matrix &matrix2) {
     int r1{matrix1.r}, c1{matrix1.c}, r2{matrix2.r}, c2{matrix2.c};
 
@@ -112,9 +123,8 @@ Matrix dot(Matrix &matrix1, Matrix &matrix2) {
     int r2 = matrix2.r;
 
     if(r1 == r2) {
-        Matrix t_result = matrix1.transpose();
-        t_result = t_result.matrix_conjugate();
-        Matrix result = matrix_mul(t_result, matrix2);
+        Matrix result = matrix1.dagger();
+        result = matrix_mul(result, matrix2);
         
         return result;
     }
