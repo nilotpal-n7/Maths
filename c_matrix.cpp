@@ -106,7 +106,7 @@ Matrix matrix_mul(Matrix &matrix1, Matrix &matrix2) {
             rpt(j, 0, c2) {
                 Complex sum(0, 0);
                 rpt(k, 0, c1)
-                    sum = sum + matrix1.matrix[l][k] * matrix2.matrix[l][j];
+                    sum = sum + (matrix1.matrix[l][k] * matrix2.matrix[k][j]);
 
                 result.matrix[l][j] = sum;
             };
@@ -220,24 +220,4 @@ Matrix rref(Matrix &matrix) {
     };
 
     return result;
-}
-
-int main() {
-    Matrix matrix(0, 0);
-    matrix.print();
-    Matrix result = rref(matrix);
-    result.print();
-    result = matrix.transpose();
-    result.print();
-    
-    try{
-        result = dot(matrix, matrix);
-        result.print();
-    }
-    catch(const char *err) {
-        cout<<"Error-> "<<err<<"\n"<<endl;
-    };
-
-    cin.get();
-    return 0;
 }

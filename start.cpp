@@ -5,7 +5,7 @@ int main() {
     matrix.print();
     Matrix result = rref(matrix);
     result.print();
-    result = matrix.transpose();
+    result = matrix.dagger();
     result.print();
     
     try{
