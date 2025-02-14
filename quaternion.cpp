@@ -137,3 +137,18 @@ istream& operator>>(istream& in, Quaternion &z) {
     z = stoq(z_c);
     return in;
 };
+
+int main() {
+    Quaternion q1 = 1 + 2*i - 3*j + 1*k;
+    Quaternion q2 = 2 + 3*i - 4*j + 1*k;
+    Quaternion q3 = 3 + 1*i + 1*j + 2*k;
+
+    Quaternion result = q1 * q2 * q3;
+    cout<<result<<endl;
+    result = q2 * q3 * q1;
+    cout<<result<<endl;
+    result = q3 * q1 * q2;
+    cout<<result<<endl;
+
+    return 0;
+}

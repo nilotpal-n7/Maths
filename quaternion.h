@@ -10,7 +10,7 @@ struct Quaternion{
     Quaternion unit();
 };
 
-const Quaternion q = Quaternion(0, 1, 0, 0);
+const Quaternion i = Quaternion(0, 1, 0, 0);
 const Quaternion j = Quaternion(0, 0, 1, 0);
 const Quaternion k = Quaternion(0, 0, 0, 1);
 
