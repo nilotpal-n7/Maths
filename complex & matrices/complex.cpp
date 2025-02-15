@@ -16,8 +16,7 @@ float Complex::modulus2() {
 };
 
 float Complex::modulus() {
-    Complex v(this->real, this->imag);
-    return sqrt(v.modulus2());
+    return sqrt(this->modulus2());
 };
 
 float Complex::phase() {
@@ -101,6 +100,11 @@ Complex stoc(string& s) {
         rpt(j, index + 3, s_len)
             imag += s[j];
     };
+
+    if(imag == "")
+        imag = "0";
+    if(real == "")
+        real = "0";
 
     return Complex(stof(real), stof(imag));
 }

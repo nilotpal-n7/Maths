@@ -2,6 +2,7 @@
 #include "complex.h"
 #define vvc vector<vector<Complex>>
 #define vc vector<Complex>
+int defi = 0;
 
 struct Matrix {
     int r{}, c{};
@@ -15,10 +16,14 @@ struct Matrix {
     Matrix transpose();
     Matrix matrix_conjugate();
     Matrix dagger();
+    Complex determinant();
+    Matrix inverse();
+    Matrix adjoint();
 };
+Matrix defm(-1, -1);
 
 bool isequal(Matrix &matrix1, Matrix &matrix2);
 Matrix matrix_mul(Matrix &matrix1, Matrix &matrix2);
 Matrix dot(Matrix &matrix1, Matrix &matrix2);
-Matrix ref(Matrix &matrix, int n, int m);
-Matrix rref(Matrix &matrix);
+Matrix ref(Matrix &matrix, int &swap=defi, Matrix &id=defm, int n=0, int m=0);
+Matrix rref(Matrix &matrix, Matrix &id=defm);
