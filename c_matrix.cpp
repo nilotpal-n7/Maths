@@ -157,7 +157,7 @@ void lead_unity(Matrix &matrix, int n, int m, int r, int c) {
 
 void lead_sub(Matrix &matrix, int n, int m, int r, int c) {
     rpt(i, n + 1, r) {
-        Complex sub = matrix.matrix[i][m];
+        Complex sub = matrix.matrix[i][m] / matrix.matrix[n][m];
         
         rpt(j, m, c)
             matrix.matrix[i][j] = matrix.matrix[i][j] - (matrix.matrix[n][j] * sub);
@@ -185,7 +185,6 @@ Matrix ref(Matrix &matrix, int n, int m) {
     int returned = lead_swap(result, n, m, r, c);
 
     if(returned) {
-        lead_unity(result, n ,m, r, c);
         lead_sub(result, n, m, r, c);
         n += 1;
     };
@@ -201,8 +200,9 @@ Matrix rref(Matrix &matrix) {
 
     rpt(i, 0, r) {
         rpt(j, 0, c) {
-            if(result.matrix[i][j] == 1) {
+            if(!(result.matrix[i][j] == Complex(0, 0))) {
                 index[i] = j;
+                lead_unity(result, i, j, r, c);
                 break;
             };
         };
