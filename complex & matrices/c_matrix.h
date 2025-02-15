@@ -17,7 +17,7 @@ struct Matrix {
     Complex determinant();
     Matrix inverse();
     Matrix adjoint();
-    vc operator[](int j);
+    vc &operator[](int j);
 };
 int defi = 0;
 Matrix defm(1, 1);

@@ -27,6 +27,16 @@ Complex Complex::conjugate() {
     return Complex(this->real, -1 * this->imag);
 };
 
+void Complex::round() {
+    int r = this->real;
+    int k = this->imag;
+
+    if(abs(this->real - r) < pow(10, -3))
+        this->real = r;
+    if(abs(this->imag - k) < pow(10, -3))
+        this->imag = k;
+}
+
 Complex operator+(float a, Complex z) {
     return Complex(z.real + a, z.imag);
 }
@@ -88,7 +98,7 @@ Complex stoc(string& s) {
     string real = "", imag = "";
 
     rpt(j, 0, s_len) {
-        if(s[j] == '+') {
+        if(s[j] == 'i') {
             index = j;
             break;
         };
@@ -96,11 +106,13 @@ Complex stoc(string& s) {
         real += s[j];
     };
 
-    if(index < s_len - 3) {
-        rpt(j, index + 3, s_len)
+    if(index < s_len - 2) {
+        rpt(j, index + 2, s_len)
             imag += s[j];
     };
 
+    if(index == (s_len - 1))
+        imag ="1";
     if(imag == "")
         imag = "0";
     if(real == "")

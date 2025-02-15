@@ -8,6 +8,7 @@ struct Complex {
     float modulus();
     float phase();
     Complex conjugate();
+    void round();
 };
 
 const Complex i = Complex(0, 1);

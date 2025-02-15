@@ -28,9 +28,14 @@ void Matrix::_init_() {
 }
 
 void Matrix::print() {
+    //std::cout << std::setprecision(2) << std::fixed;
+
     rpt(i, 0, r) {
-        rpt(j, 0, c)
+        rpt(j, 0, c) {
+            matrix[i][j].round();
             cout<<matrix[i][j]<<", ";
+        };
+
         cout<<endl;
     };
     cout<<endl;
@@ -49,7 +54,7 @@ string Matrix::dim() {
     return d;
 }
 
-vc Matrix::operator[](int j) {
+vc &Matrix::operator[](int j) {
     return this->matrix[j];
 };
 
@@ -77,8 +82,10 @@ Matrix Matrix::matrix_conjugate() {
 
 Matrix Matrix::dagger() {
     Matrix result(r, c);
-    result = this->transpose().matrix_conjugate();
-    
+    result.matrix = this->matrix;
+    result = result.transpose();
+    result = result.matrix_conjugate();
+
     return result;
 }
 
@@ -315,4 +322,16 @@ Matrix rref(Matrix &matrix, Matrix &id) {
     };
 
     return result;
+}
+
+int main() {
+    Matrix matrix(0, 0);
+    matrix.print();
+    Matrix result = matrix.inverse();
+    result.print();
+    result = matrix_mul(matrix, result);
+    result.print();
+
+    cin.get();
+    return 0;
 }
