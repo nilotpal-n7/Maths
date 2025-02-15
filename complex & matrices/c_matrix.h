@@ -1,8 +1,6 @@
-#include "essentials.h"
 #include "complex.h"
 #define vvc vector<vector<Complex>>
 #define vc vector<Complex>
-int defi = 0;
 
 struct Matrix {
     int r{}, c{};
@@ -19,9 +17,12 @@ struct Matrix {
     Complex determinant();
     Matrix inverse();
     Matrix adjoint();
+    vc operator[](int j);
 };
-Matrix defm(-1, -1);
+int defi = 0;
+Matrix defm(1, 1);
 
+bool operator==(Matrix &matrix1, Matrix &matrix2);
 bool isequal(Matrix &matrix1, Matrix &matrix2);
 Matrix matrix_mul(Matrix &matrix1, Matrix &matrix2);
 Matrix dot(Matrix &matrix1, Matrix &matrix2);

@@ -3,7 +3,7 @@
 int main() {
     Matrix matrix(0, 0);
     matrix.print();
-    Matrix result = rref(matrix, defm);
+    Matrix result = rref(matrix);
     result.print();
     result = matrix.dagger();
     result.print();

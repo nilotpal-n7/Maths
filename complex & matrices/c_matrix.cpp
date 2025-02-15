@@ -49,12 +49,16 @@ string Matrix::dim() {
     return d;
 }
 
+vc Matrix::operator[](int j) {
+    return this->matrix[j];
+};
+
 Matrix Matrix::transpose() {
     Matrix result(c, r);
 
     rpt(k, 0, r) {
         rpt(j, 0, c)
-            result.matrix[j][k] = this->matrix[k][j];
+            result[j][k] = this->matrix[k][j];
     };
 
     return result;
@@ -65,7 +69,7 @@ Matrix Matrix::matrix_conjugate() {
 
     rpt(k, 0, r) {
         rpt(j, 0, c)
-            result.matrix[k][j] = this->matrix[k][j].conjugate();
+            result[k][j] = this->matrix[k][j].conjugate();
     };
 
     return result;
@@ -95,7 +99,7 @@ Complex Matrix::determinant() {
 
     rpt(k, 0, r) {
         rpt(j, 0, c) {
-            if(!(result.matrix[k][j] == 0)) {
+            if(!(result[k][j] == 0)) {
                 index[k] = j;
                 break;
             };
@@ -105,9 +109,9 @@ Complex Matrix::determinant() {
     rpt(j, 0, r) {
         if(index[j] == -1)
             throw "error";
-        det = det * result.matrix[j][j];
+        det = det * result[j][j];
 
-        if(result.matrix[j][j] == 0)
+        if(result[j][j] == 0)
             break;
     };
 
@@ -142,11 +146,15 @@ Matrix Matrix::adjoint() {
     
     rpt(i ,0, r) {
         rpt(j , 0, c) {
-            result.matrix[i][j] = result.matrix[i][j] / (det * result.matrix[i][j]);
+            result[i][j] = result[i][j] / (det * result[i][j]);
         }
     }
 
     return result;
+}
+
+bool operator==(Matrix &matrix1, Matrix &matrix2) {
+    return (&matrix1 == &matrix2);
 }
 
 bool isequal(Matrix &matrix1, Matrix &matrix2) {
@@ -157,7 +165,7 @@ bool isequal(Matrix &matrix1, Matrix &matrix2) {
 
     rpt(k, 0, r1) {
         rpt(j , 0, c2) {
-            if(!(matrix1.matrix[k][j] == matrix2.matrix[k][j]))
+            if(!(matrix1[k][j] == matrix2[k][j]))
                 return false;
         };
     };
@@ -175,9 +183,9 @@ Matrix matrix_mul(Matrix &matrix1, Matrix &matrix2) {
             rpt(j, 0, c2) {
                 Complex sum(0, 0);
                 rpt(k, 0, c1)
-                    sum = sum + (matrix1.matrix[l][k] * matrix2.matrix[k][j]);
+                    sum = sum + (matrix1[l][k] * matrix2[k][j]);
 
-                result.matrix[l][j] = sum;
+                result[l][j] = sum;
             };
         };
 
@@ -211,10 +219,10 @@ int lead_swap(Matrix &matrix, int n, int m, int r, int c, int &swap=defi, Matrix
             matrix.matrix[n] = matrix.matrix[k];
             matrix.matrix[k] = matrix_n;
 
-            if(!(id.matrix == defm.matrix)){
-                vc id_n = id.matrix[n];
-                id.matrix[n] = id.matrix[k];
-                id.matrix[k] = id_n;
+            if(!(id == defm)){
+                vc id_n = id[n];
+                id[n] = id[k];
+                id[k] = id_n;
             };
 
             if(swap != defi)
@@ -232,8 +240,8 @@ void lead_sub(Matrix &matrix, int n, int m, int r, int c, Matrix &id=defm) {
         
         rpt(j, 0, c) {
             matrix.matrix[k][j] = matrix.matrix[k][j] - (matrix.matrix[n][j] * sub);
-            if(!(id.matrix == defm.matrix))
-                id.matrix[k][j] = id.matrix[k][j] - (id.matrix[n][j] * sub);
+            if(!(id == defm))
+                id[k][j] = id[k][j] - (id[n][j] * sub);
         };
     };
 }
@@ -243,8 +251,8 @@ void rest_sub(Matrix &matrix, int n, int m, int r, int c, Matrix &id=defm) {
 
     rpt(j, n, r) {
         matrix.matrix[j] = zeros;
-        if(!(id.matrix == defm.matrix))
-            id.matrix[j] = zeros;
+        if(!(id == defm))
+            id[j] = zeros;
     };
 }
 
@@ -277,14 +285,14 @@ Matrix rref(Matrix &matrix, Matrix &id) {
 
     rpt(x, 0, r) {
         rpt(j, 0, c) {
-            if(!(result.matrix[x][j] == Complex(0, 0))) {
+            if(!(result[x][j] == Complex(0, 0))) {
                 index[x] = j;
-                Complex div = result.matrix[x][j];
+                Complex div = result[x][j];
 
                 rpt(k, 0, c) {
-                    result.matrix[x][k] = result.matrix[x][k] / div;
-                    if(!(id.matrix == defm.matrix))
-                        id.matrix[x][k] = id.matrix[x][k] / div;
+                    result[x][k] = result[x][k] / div;
+                    if(!(id == defm))
+                        id[x][k] = id[x][k] / div;
                 };
                 
                 break;
@@ -296,12 +304,12 @@ Matrix rref(Matrix &matrix, Matrix &id) {
         rpt(k, 1, x + 1) {
             if(index[r - k] == -1)
                 continue;        
-            Complex mul{result.matrix[r - (x + 1)][index[r - k]]};
+            Complex mul{result[r - (x + 1)][index[r - k]]};
 
             rpt(j, 0, c) {
-                result.matrix[r - (x + 1)][j] = result.matrix[r - (x + 1)][j] - (result.matrix[r - k][j] * mul);
-                if(!(id.matrix == defm.matrix))
-                    id.matrix[r - (x + 1)][j] = id.matrix[r - (x + 1)][j] - (id.matrix[r - k][j] * mul);
+                result[r - (x + 1)][j] = result[r - (x + 1)][j] - (result[r - k][j] * mul);
+                if(!(id == defm))
+                    id[r - (x + 1)][j] = id[r - (x + 1)][j] - (id[r - k][j] * mul);
             };
         };
     };
