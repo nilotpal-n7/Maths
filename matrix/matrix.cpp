@@ -343,6 +343,14 @@ vvf adjoint(vvf &matrix) {
     return result;
 }
 
+vf eigenvalues(vvf &matrix) {
+    vf result(0);
+    
+
+
+    return result;
+}
+
 int main() {
     int r{}, c{};
     cin>>r>>c;

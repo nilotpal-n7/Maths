@@ -17,3 +17,4 @@ vvf rref(vvf &matrix, vvf &id=defv);
 float determinant(vvf &matrix);
 vvf inverse(vvf &matrix);
 vvf adjoint(vvf &matrix);
+vf eigenvalues(vvf &matrix);
