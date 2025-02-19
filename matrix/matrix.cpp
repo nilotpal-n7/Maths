@@ -35,6 +35,41 @@ vvf matrix_init() {
     return matrix;
 }
 
+vvf operator-(vvf &matrix1, vvf matrix2) {
+    int r1{}, c1{};
+    dim(matrix1, &r1, &c1);
+    int r2{}, c2{};
+    dim(matrix2, &r2, &c2);
+
+    if((r1 != r2) or (c1 != c2)) {
+        throw "error";
+    }
+
+    vvf result(r1, vf(c1, 0));
+
+    rpt(i, 0, r1) {
+        rpt(j, 0, c1) {
+            result[i][j] = matrix1[i][j] - matrix2[i][j];
+        };
+    };
+
+    return result;
+}
+
+vvf operator*(float x, vvf matrix) {
+    int r{}, c{};
+    dim(matrix, &r, &c);
+    vvf result(r, vf(c, 0));
+
+    rpt(i, 0, r) {
+        rpt(j, 0, c) {
+            result[i][j] = x * matrix[i][j];
+        };
+    };
+
+    return result;
+}
+
 void print_matrix(vvf &matrix) {
     int r{}, c{};
     dim(matrix, &r, &c);
@@ -143,12 +178,16 @@ int lead_swap(vvf &matrix, int n, int m, int r, int c, int &swap=defi, vvf &id=d
             };
 
             cout<<"R["<<n + 1<<"] <-> ["<<i + 1<<"]"<<endl;
-            rpt(i, 0, r) {
-                rpt(j, 0, c)
-                    cout<<id[i][j]<<" ";
+
+            if(id != defv) {
+                rpt(i, 0, r) {
+                    rpt(j, 0, c)
+                        cout<<id[i][j]<<" ";
+                    cout<<endl;
+                };
+
                 cout<<endl;
             };
-            cout<<endl;
 
             if(swap != defi)
                 swap++; 
@@ -170,11 +209,15 @@ void lead_sub(vvf &matrix, int n, int m, int r, int c, vvf &id=defv) {
         };
 
         cout<<"R["<<i + 1<<"] -> R["<<i + 1<<"] - R["<<n + 1<<"]*"<<sub<<endl;
-        rpt(i, 0, r) {
-            rpt(j, 0, c)
-                cout<<id[i][j]<<" ";
-            cout<<endl;
-        };
+        if(id != defv) {
+                rpt(i, 0, r) {
+                    rpt(j, 0, c)
+                        cout<<id[i][j]<<" ";
+                    cout<<endl;
+                };
+                
+                cout<<endl;
+            };
         cout<<endl;
     };
 }
@@ -188,9 +231,13 @@ void rest_sub(vvf &matrix, int n, int m, int r, int c, vvf &id=defv) {
             id[i] = zeros;
         
         cout<<"R["<<i + 1<<"] -> R["<<i + 1<<"] * "<<0<<endl;
-        rpt(i, 0, r) {
-            rpt(j, 0, c)
-                cout<<id[i][j]<<" ";
+        if(id != defv) {
+            rpt(i, 0, r) {
+                rpt(j, 0, c)
+                    cout<<id[i][j]<<" ";
+                cout<<endl;
+            };
+            
             cout<<endl;
         };
         cout<<endl;
@@ -239,9 +286,13 @@ vvf rref(vvf &matrix, vvf &id) {
                 };
             
                 cout<<"R["<<i + 1<<"] -> R["<<i + 1<<"] / "<<div<<endl;
-                rpt(k, 0, r) {
-                    rpt(l, 0, c)
-                        cout<<id[k][l]<<" ";
+                if(id != defv) {
+                    rpt(i, 0, r) {
+                        rpt(j, 0, c)
+                            cout<<id[i][j]<<" ";
+                        cout<<endl;
+                    };
+                    
                     cout<<endl;
                 };
                 cout<<endl;
@@ -283,23 +334,11 @@ float determinant(vvf &matrix) {
         throw "error";
 
     float det{1};
-    vi index(r, -1);
     int swap = 0;
     vvf result = ref(matrix, swap);
     cout<<"swap: "<<swap<<endl;
 
     rpt(i, 0, r) {
-        rpt(j, 0, c) {
-            if(result[i][j] != 0) {
-                index[i] = j;
-                break;
-            };
-        };
-    };
-
-    rpt(i, 0, r) {
-        if(index[i] == -1)
-            throw "error";
         det *= result[i][i];
 
         if(result[i][i] == 0)
@@ -343,12 +382,71 @@ vvf adjoint(vvf &matrix) {
     return result;
 }
 
-vf eigenvalues(vvf &matrix) {
-    vf result(0);
-    
+vvf identity(int r) {
+    vvf result(r, vf(r, 0));
 
+    rpt(i, 0, r) {
+        result[i][i] = 1;
+    }
 
     return result;
+}
+
+float f(vvf &matrix, float x, vf &sol=dev, float dx=pow(10, -6)) {
+    int r = dim_r(matrix);
+    vvf result_e = matrix - (x * identity(r));
+    float det_f = determinant(result_e);
+
+    rpt(i, 0, sol.size()) {
+        if(x == sol[i])
+            det_f /= ((x + dx) - sol[i]);
+        else 
+            det_f /= (x - sol[i]);
+    };
+
+    return det_f;
+}
+
+float df_dx(vvf &matrix, float x, float dx=pow(10, -6), vf &sol=dev) {
+    float df = (f(matrix, x + dx, sol) - f(matrix, x - dx, sol));
+
+    return (df / (2 * dx));
+}
+
+float x_intercept(vvf &matrix, float x, vf &sol=dev) {
+    float y = f(matrix, x, sol);
+    float dy_dx = df_dx(matrix, x, pow(10, -6), sol);
+
+    return (x - (y / dy_dx));
+}
+
+vf eigenvalues(vvf &matrix, float x) {
+    int r{}, c{};
+    dim(matrix, &r, &c);
+
+    if(r != c) {
+        throw "error";
+    };
+
+
+    vf sol(0, 0);
+    int n{r};
+    float dx = pow(10, -6);
+
+    while(n) {
+        while(abs(f(matrix, x, sol)) > dx)
+            x = x_intercept(matrix, x, sol);
+        
+        if(abs(x - floor(x)) < dx)
+            sol.push_back(floor(x));
+        else if(abs(x - ceil(x)) < dx)
+            sol.push_back(ceil(x));
+        else
+            sol.push_back(x);
+
+        n -= 1;
+    };
+    return sol;
 }
 
 int main() {
@@ -362,19 +460,9 @@ int main() {
     };
     cout<<endl;
 
-    vvf result = inverse(matrix_i);
-
-    rpt(i, 0, r) {
-        rpt(j, 0, c)
-            cout<<matrix_i[i][j]<<" ";
-        cout<<endl;
-    };
-    cout<<endl;
-
-    rpt(i, 0, r) {
-        rpt(j, 0, c)
-            cout<<result[i][j]<<" ";
-        cout<<endl;
+    vf eig = eigenvalues(matrix_i, 0);
+    for(float x: eig) {
+        cout<<x<<", ";
     };
     cout<<endl;
 

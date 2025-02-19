@@ -91,31 +91,18 @@ Matrix Matrix::dagger() {
 
 Complex Matrix::determinant() {
     int r{this->r}, c{this->c};
-
-    if(r != c)
-        throw "error";
-
+    if(r != c) {
+        cout<<"Dimension Error: Det(r != c)"<<endl;
+        throw 101;
+    };
     Complex det(1, 0);
-    vi index(r, -1);
     int swap = 0;
 
     Matrix t_matrix(r, c);
     t_matrix.matrix = this->matrix;
     Matrix result = ref(t_matrix, swap);
-    cout<<"swap: "<<swap<<endl;
-
-    rpt(k, 0, r) {
-        rpt(j, 0, c) {
-            if(!(result[k][j] == 0)) {
-                index[k] = j;
-                break;
-            };
-        };
-    };
 
     rpt(j, 0, r) {
-        if(index[j] == -1)
-            throw "error";
         det = det * result[j][j];
 
         if(result[j][j] == 0)
@@ -130,19 +117,17 @@ Complex Matrix::determinant() {
 
 Matrix Matrix::inverse() {
     int r{this->r}, c{this->c};
-    if(r != c)
-        throw "error";
-
-    Matrix identity(r, c);
-
-    rpt(i , 0, r)
-        identity.matrix[i][i] = 1;
+    if(r != c) {
+        cout<<"Dimension Error: Inverse(r != c)"<<endl;
+        throw 101;
+    };
+    Matrix result = identity(r, c);
 
     Matrix t_matrix(r, c);
     t_matrix.matrix = this->matrix;
-    Matrix result = rref(t_matrix, identity);
+    result = rref(t_matrix, result);
     
-    return identity;
+    return result;
 }
 
 Matrix Matrix::adjoint() {
@@ -180,40 +165,38 @@ bool isequal(Matrix &matrix1, Matrix &matrix2) {
     return true;
 }
 
-Matrix matrix_mul(Matrix &matrix1, Matrix &matrix2) {
+Matrix mul(Matrix &matrix1, Matrix &matrix2) {
     int r1{matrix1.r}, c1{matrix1.c}, r2{matrix2.r}, c2{matrix2.c};
+    if(c1 != r2) {
+        cout<<"Dimension Error: Mul(c1 != r2)"<<endl;
+        throw 101;
+    };
+    Matrix result(r1, c2);
 
-    if(c1 == r2) {
-        Matrix result(r1, c2);
+    rpt(l, 0, r1) {
+        rpt(j, 0, c2) {
+            Complex sum(0, 0);
 
-        rpt(l, 0, r1) {
-            rpt(j, 0, c2) {
-                Complex sum(0, 0);
-                rpt(k, 0, c1)
-                    sum = sum + (matrix1[l][k] * matrix2[k][j]);
-
-                result[l][j] = sum;
-            };
+            rpt(k, 0, c1)
+                sum = sum + (matrix1[l][k] * matrix2[k][j]);
+            result[l][j] = sum;
         };
+    };
 
-        return result;
-    }
-    else
-        throw "Dimension Error: Mul(c1 != r2)";
+    return result;
 }
 
 Matrix dot(Matrix &matrix1, Matrix &matrix2) {
-    int r1 = matrix1.r;
-    int r2 = matrix2.r;
+    int r1{matrix1.r}, r2{matrix2.r};
+    if(r1 != r2) {
+        cout<<"Dimension Error: Dot(r1 != r2)"<<endl;
+        throw 101;
+    };
 
-    if(r1 == r2) {
-        Matrix result = matrix1.dagger();
-        result = matrix_mul(result, matrix2);
+    Matrix result = matrix1.dagger();
+    result = mul(result, matrix2);
         
-        return result;
-    }
-    else
-        throw "Dimension Error: Dot(r1 != r2)";
+    return result;
 }
 
 int lead_swap(Matrix &matrix, int n, int m, int r, int c, int &swap=defi, Matrix &id=defm) {
@@ -324,13 +307,77 @@ Matrix rref(Matrix &matrix, Matrix &id) {
     return result;
 }
 
+Matrix identity(int r, int c, Complex x) {
+    Matrix result(r, c);
+    if(r != c) {
+        cout<<"Dimension Error: Identity(c != r)"<<endl;
+        throw 101;
+    };
+
+    rpt(i, 0, r)
+        result[i][i] = x;
+
+    return result;
+}
+
+Complex f(Matrix &matrix, Complex x, vc &sol=dev, double dx=pow(10, -9)) {
+    int r{matrix.r}, c{matrix.c};
+    Matrix result_e(r, c);
+    result_e.matrix = matrix.matrix;
+    Matrix iden = identity(r, c, x);
+
+    rpt(j, 0, r) {
+        result_e[j][j] = result_e[j][j] - iden[j][j];
+    }
+    Complex det_f = result_e.determinant();
+
+    rpt(j, 0, sol.size()) {
+        if(x == sol[j]) {
+            det_f = det_f / ((x + dx) - sol[j]);
+        }
+        else 
+            det_f = det_f / (x - sol[j]);
+    };
+
+    return det_f;
+}
+
+Complex df_dx(Matrix &matrix, Complex x, double dx=pow(10, -9), vc &sol=dev) {
+    Complex df = (f(matrix, x + dx, sol) - f(matrix, x - dx, sol));
+
+    return (df / (2 * dx));
+}
+
+Complex x_intercept(Matrix &matrix, Complex x, vc &sol=dev) {
+    Complex y = f(matrix, x, sol);
+    Complex dy_dx = df_dx(matrix, x, pow(10, -9), sol);
+
+    return (x - (y / dy_dx));
+}
+
+vc eigenvalues(Matrix &matrix, Complex x=Complex(0, 0)) {
+    int r{matrix.r}, c{matrix.c};
+    vc sol(0, Complex(0, 0));
+    int n{r};
+    double dx = pow(10, -7);
+
+    while(n) {
+        while(f(matrix, x, sol).modulus() > dx)
+            x = x_intercept(matrix, x, sol);
+        
+        x = rounder(x, dx);
+        sol.push_back(x);
+        n -= 1;
+    };
+    return sol;
+}
+
 int main() {
     Matrix matrix(0, 0);
     matrix.print();
-    Matrix result = matrix.inverse();
-    result.print();
-    result = matrix_mul(matrix, result);
-    result.print();
+    vc result = eigenvalues(matrix, Complex(0, 0));
+    for(Complex x: result)
+        cout<<x<<", ";
 
     cin.get();
     return 0;

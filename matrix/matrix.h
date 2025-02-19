@@ -1,5 +1,6 @@
 #include "essentials.h"
 vvf defv(0, vf(0, 0));
+vf dev(0, 0);
 int defi = 0;
 
 int dim_r(vvf &matrix);
@@ -17,4 +18,5 @@ vvf rref(vvf &matrix, vvf &id=defv);
 float determinant(vvf &matrix);
 vvf inverse(vvf &matrix);
 vvf adjoint(vvf &matrix);
-vf eigenvalues(vvf &matrix);
+vvf identity(int r);
+vf eigenvalues(vvf &matrix, float x=0);

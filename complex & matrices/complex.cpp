@@ -1,25 +1,25 @@
 #include "complex.h"
 
-Complex::Complex(float real, float imag) {
+Complex::Complex(double real, double imag) {
     this->real = real;
     this->imag = imag;
 };
 
-Complex Complex::operator=(float a) {
+Complex Complex::operator=(double a) {
     this->real = a;
     this->imag = 0;
     return Complex(this->real, this->imag);
 };
 
-float Complex::modulus2() {
+double Complex::modulus2() {
     return ((this->real * this->real) + (this->imag * this->imag));
 };
 
-float Complex::modulus() {
+double Complex::modulus() {
     return sqrt(this->modulus2());
 };
 
-float Complex::phase() {
+double Complex::phase() {
     return atan2(this->imag, this->real);
 };
 
@@ -37,35 +37,35 @@ void Complex::round() {
         this->imag = k;
 }
 
-Complex operator+(float a, Complex z) {
+Complex operator+(double a, Complex z) {
     return Complex(z.real + a, z.imag);
 }
 
-Complex operator+(Complex z, float a) {
+Complex operator+(Complex z, double a) {
     return Complex(z.real + a, z.imag);
 }
 
-Complex operator-(float r, Complex z) {
+Complex operator-(double r, Complex z) {
     return Complex(z.real - r, -1 * z.imag);
 }
 
-Complex operator-(Complex z, float a) {
+Complex operator-(Complex z, double a) {
     return Complex(z.real - a, z.imag);
 }
 
-Complex operator*(float a, Complex z) {
+Complex operator*(double a, Complex z) {
     return Complex(z.real * a, z.imag * a);
 }
 
-Complex operator*(Complex z, float a) {
+Complex operator*(Complex z, double a) {
     return Complex(z.real * a, z.imag * a);
 }
 
-Complex operator/(Complex z, float a) {
+Complex operator/(Complex z, double a) {
     return Complex(z.real / a, z.imag / a);
 }
 
-Complex operator/(float a, Complex z) {
+Complex operator/(double a, Complex z) {
     return (a * z.conjugate() / z.modulus2());
 }
 
@@ -133,3 +133,17 @@ istream& operator>>(istream& in, Complex &z) {
     z = stoc(z_c);
     return in;
 };
+
+Complex rounder(Complex x, float dx) {
+    if(abs(x.real - floor(x.real)) < dx)
+        x.real = floor(x.real);
+    else if(abs(x.real - ceil(x.real)) < dx)
+        x.real = ceil(x.real);
+
+    if(abs(x.imag - floor(x.imag)) < dx)
+        x.imag = floor(x.imag);
+    else if(abs(x.imag - ceil(x.imag)) < dx)
+        x.imag = ceil(x.imag);
+    
+    return x;
+}

@@ -1,26 +1,26 @@
 #include "essentials.h"
 
 struct Complex {
-    float real{}, imag{};
-    Complex(float real=0, float imag=0);
-    Complex operator=(float r);
-    float modulus2();
-    float modulus();
-    float phase();
+    double real{}, imag{};
+    Complex(double real=0, double imag=0);
+    Complex operator=(double r);
+    double modulus2();
+    double modulus();
+    double phase();
     Complex conjugate();
     void round();
 };
 
 const Complex i = Complex(0, 1);
 
-Complex operator+(float a, Complex z);
-Complex operator+(Complex z, float a);
-Complex operator-(float r, Complex z);
-Complex operator-(Complex z, float a);
-Complex operator*(float a, Complex z);
-Complex operator*(Complex z, float a);
-Complex operator/(Complex z, float a);
-Complex operator/(float a, Complex z);
+Complex operator+(double a, Complex z);
+Complex operator+(Complex z, double a);
+Complex operator-(double r, Complex z);
+Complex operator-(Complex z, double a);
+Complex operator*(double a, Complex z);
+Complex operator*(Complex z, double a);
+Complex operator/(Complex z, double a);
+Complex operator/(double a, Complex z);
 Complex operator+(Complex a, Complex b);
 Complex operator-(Complex a, Complex b);
 Complex operator*(Complex a, Complex b);
@@ -31,3 +31,4 @@ bool operator==(Complex a, Complex b);
 
 ostream& operator<<(ostream& out, Complex z);
 istream& operator>>(istream& in, Complex &z);
+Complex rounder(Complex x, float dx=pow(10, -7));
