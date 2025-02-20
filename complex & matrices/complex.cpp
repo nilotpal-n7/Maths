@@ -27,14 +27,20 @@ Complex Complex::conjugate() {
     return Complex(this->real, -1 * this->imag);
 };
 
-void Complex::round() {
-    int r = this->real;
-    int k = this->imag;
+Complex Complex::round(double dx) {
+    Complex x(real, imag);
 
-    if(abs(this->real - r) < pow(10, -3))
-        this->real = r;
-    if(abs(this->imag - k) < pow(10, -3))
-        this->imag = k;
+    if(abs(real - floor(real)) < dx)
+        x.real = floor(real);
+    else if(abs(real - ceil(real)) < dx)
+        x.real = ceil(real);
+    
+    if(abs(imag - floor(imag)) < dx)
+        x.imag = floor(imag);
+    else if(abs(real - ceil(imag)) < dx)
+        x.imag = ceil(imag);
+
+    return x;
 }
 
 Complex operator+(double a, Complex z) {
@@ -133,17 +139,3 @@ istream& operator>>(istream& in, Complex &z) {
     z = stoc(z_c);
     return in;
 };
-
-Complex rounder(Complex x, float dx) {
-    if(abs(x.real - floor(x.real)) < dx)
-        x.real = floor(x.real);
-    else if(abs(x.real - ceil(x.real)) < dx)
-        x.real = ceil(x.real);
-
-    if(abs(x.imag - floor(x.imag)) < dx)
-        x.imag = floor(x.imag);
-    else if(abs(x.imag - ceil(x.imag)) < dx)
-        x.imag = ceil(x.imag);
-    
-    return x;
-}

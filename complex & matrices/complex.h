@@ -8,7 +8,7 @@ struct Complex {
     double modulus();
     double phase();
     Complex conjugate();
-    void round();
+    Complex round(double dx=pow(10, -7));
 };
 
 const Complex i = Complex(0, 1);
@@ -31,4 +31,3 @@ bool operator==(Complex a, Complex b);
 
 ostream& operator<<(ostream& out, Complex z);
 istream& operator>>(istream& in, Complex &z);
-Complex rounder(Complex x, float dx=pow(10, -7));

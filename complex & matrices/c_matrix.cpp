@@ -355,7 +355,7 @@ Complex x_intercept(Matrix &matrix, Complex x, vc &sol=dev) {
     return (x - (y / dy_dx));
 }
 
-vc eigenvalues(Matrix &matrix, Complex x=Complex(0, 0)) {
+vc eigenvalues(Matrix &matrix, Complex x) {
     int r{matrix.r}, c{matrix.c};
     vc sol(0, Complex(0, 0));
     int n{r};
@@ -365,19 +365,156 @@ vc eigenvalues(Matrix &matrix, Complex x=Complex(0, 0)) {
         while(f(matrix, x, sol).modulus() > dx)
             x = x_intercept(matrix, x, sol);
         
-        x = rounder(x, dx);
-        sol.push_back(x);
+        sol.push_back(x.round(dx));
         n -= 1;
     };
     return sol;
 }
 
+int Matrix::rank() {
+    int r(this->r), c(this->r);
+    int result{};
+    Matrix t_matrix(r, c);
+    t_matrix.matrix = this->matrix;
+    Matrix rref_r = rref(t_matrix);
+
+    rpt(x, 0, r) {
+        rpt(j, 0, c) {
+            if(rref_r[x][j] == Complex(1, 0))
+                result++;
+        };
+    };
+
+    return result;
+}
+
+int rref_rank(Matrix &matrix) {
+    int r(matrix.r), c(matrix.r);
+    int result{};
+
+    rpt(x, 0, r) {
+        rpt(j, 0, c) {
+            if(matrix[x][j] == Complex(1, 0))
+                result++;
+        };
+    };
+
+    return result;
+}
+
+Matrix asker(int r, int c) {
+    cout<<"n ";
+    rpt(j, 0, c)
+        cout<<"x"<<j + 1<<" ";
+    cout<<":val"<<endl;
+
+    Matrix aug_matrix(r, c + 1);
+
+    rpt(j, 0, r) {
+        cout<<j + 1<<" ";
+        rpt(k, 0, c + 1) {
+            cin>>aug_matrix[j][k];
+            cout<<" ";
+        };
+        cout<<endl;
+    }; 
+
+    return aug_matrix;
+}
+
+Matrix solver(Matrix &matrix) {
+    int r{matrix.r}, c{matrix.c - 1};
+    Matrix aug_matrix = matrix;
+
+    if(matrix == defm) {
+        cout<<"r, c: ";
+        cin>>r>>c;
+
+        Matrix aug_matrix = asker(r, c);
+    };
+
+    Matrix rref_s = rref(aug_matrix);
+    Matrix coeff_matrix(r, c);
+
+    rpt(j, 0, r) {
+        rpt(k, 0, c)
+            coeff_matrix[j][k] = aug_matrix[j][k];
+    };
+
+    int aug_rank = rref_rank(rref_s);
+    int coeff_rank = coeff_matrix.rank();
+
+    if(aug_rank != coeff_rank) {
+        cout<<"Linear Symstem is inconsistant!"<<endl;
+        throw 101;
+    };
+
+    Matrix max_sq(c, c + 1);
+    rpt(j, 0, r) {
+        rpt(k, 0, c + 1)
+            max_sq[j][k] = rref_s[j][k];
+    };
+
+    vvc sol(1, vc(c, Complex(0, 0)));
+    rpt(j, 0, c)
+        sol[0][j] = rref_s[j][c].round();
+
+    rpt(j, 0, c) {
+        if(max_sq[j][j] == Complex(0, 0)) {
+            vc push(0, Complex(0, 0));
+            rpt(k, 0, c)
+                push.push_back(-1 * max_sq[k][j]);
+            push[j] = 1;
+            sol.push_back(push);
+        };
+    };
+
+    Matrix result(sol.size(), c);
+    result.matrix = sol;
+
+    return result;
+}
+
+Matrix eigenvec(Matrix &matrix) {
+    int r{matrix.r}, c{matrix.c};
+    vc eigval = eigenvalues(matrix);
+    vvc e_vec(0, vc(c, Complex(0, 0)));
+
+    rpt(x, 0, eigval.size()) {
+        Matrix id = identity(r, c, eigval[x]);
+        Matrix e_aug(r, c + 1);
+
+        rpt(j, 0, r) {
+            rpt(k, 0, c)
+                e_aug[j][k] = matrix[j][k] - id[j][k];
+        };
+
+        Matrix sol = solver(e_aug);
+        rpt(j, 1, sol.matrix.size()) {
+            e_vec.push_back(sol[j]);
+        }
+    };
+
+    if(e_vec.size() == 0){
+        cout<<"No. Error: Eig(No eiganvalue exist!)"<<endl;
+        throw 101;
+    }
+    Matrix result(e_vec.size(), e_vec[0].size());
+    result.matrix = e_vec;
+    return result;
+}
+
 int main() {
     Matrix matrix(0, 0);
     matrix.print();
-    vc result = eigenvalues(matrix, Complex(0, 0));
-    for(Complex x: result)
-        cout<<x<<", ";
+
+    vc eig = eigenvalues(matrix);
+    rpt(j, 0, eig.size())
+        cout<<eig[j]<<", ";
+    cout<<"\n"<<endl;
+
+    Matrix result = eigenvec(matrix);
+    result.print();
 
     cin.get();
     return 0;

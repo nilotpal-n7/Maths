@@ -18,6 +18,7 @@ struct Matrix {
     Matrix inverse();
     Matrix adjoint();
     vc &operator[](int j);
+    int rank();
 };
 int defi = 0;
 vc dev(0, Complex(0, 0));
@@ -30,4 +31,7 @@ Matrix dot(Matrix &matrix1, Matrix &matrix2);
 Matrix ref(Matrix &matrix, int &swap=defi, Matrix &id=defm, int n=0, int m=0);
 Matrix rref(Matrix &matrix, Matrix &id=defm);
 Matrix identity(int r, int c, Complex x=1);
-vc eigenvalues(Matrix &matrix, Complex x);
+vc eigenvalues(Matrix &matrix, Complex x=Complex(0, 0));
+int rref_rank(Matrix &matrix);
+Matrix solver(Matrix &matrix=defm);
+Matrix eigenvec(Matrix &matrix);
