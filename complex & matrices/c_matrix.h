@@ -19,6 +19,11 @@ struct Matrix {
     Matrix adjoint();
     vc &operator[](int j);
     int rank();
+    Matrix operator+(Matrix matrix0);
+    Matrix operator-(Matrix matrix0);
+    Matrix operator*(Matrix matrix0);
+    Matrix operator/(Matrix matrix0);
+
 };
 int defi = 0;
 vc dev(0, Complex(0, 0));
@@ -26,7 +31,6 @@ Matrix defm(1, 1);
 
 bool operator==(Matrix &matrix1, Matrix &matrix2);
 bool isequal(Matrix &matrix1, Matrix &matrix2);
-Matrix mul(Matrix &matrix1, Matrix &matrix2);
 Matrix dot(Matrix &matrix1, Matrix &matrix2);
 Matrix ref(Matrix &matrix, int &swap=defi, Matrix &id=defm, int n=0, int m=0);
 Matrix rref(Matrix &matrix, Matrix &id=defm);

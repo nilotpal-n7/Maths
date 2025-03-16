@@ -165,27 +165,6 @@ bool isequal(Matrix &matrix1, Matrix &matrix2) {
     return true;
 }
 
-Matrix mul(Matrix &matrix1, Matrix &matrix2) {
-    int r1{matrix1.r}, c1{matrix1.c}, r2{matrix2.r}, c2{matrix2.c};
-    if(c1 != r2) {
-        cout<<"Dimension Error: Mul(c1 != r2)"<<endl;
-        throw 101;
-    };
-    Matrix result(r1, c2);
-
-    rpt(l, 0, r1) {
-        rpt(j, 0, c2) {
-            Complex sum(0, 0);
-
-            rpt(k, 0, c1)
-                sum = sum + (matrix1[l][k] * matrix2[k][j]);
-            result[l][j] = sum;
-        };
-    };
-
-    return result;
-}
-
 Matrix dot(Matrix &matrix1, Matrix &matrix2) {
     int r1{matrix1.r}, r2{matrix2.r};
     if(r1 != r2) {
@@ -194,7 +173,7 @@ Matrix dot(Matrix &matrix1, Matrix &matrix2) {
     };
 
     Matrix result = matrix1.dagger();
-    result = mul(result, matrix2);
+    result = result * matrix2;
         
     return result;
 }
@@ -497,23 +476,85 @@ Matrix eigenvec(Matrix &matrix) {
 
     if(e_vec.size() == 0){
         cout<<"No. Error: Eig(No eiganvalue exist!)"<<endl;
-        throw 101;
+        Matrix result(1, c);
+        return result;
     }
-    Matrix result(e_vec.size(), e_vec[0].size());
+
+    Matrix result(e_vec.size(), c);
     result.matrix = e_vec;
     return result;
 }
+
+Matrix Matrix::operator+(Matrix matrix0) {
+    int r{this->r}, c{this->c};
+    int r0{matrix0.r}, c0{matrix0.c};
+    if(r0 != r or c0 != c) {
+        cout<<"Dimension Error: +(r1 != r2 or c1 != c2)";
+        throw 101;
+    };
+
+    Matrix result(r, c);
+    rpt(j, 0, r) {
+        rpt(k, 0, c)
+            result[j][k] = this->matrix[j][k] + matrix0[j][k];
+    };
+
+    return result;
+}
+
+Matrix Matrix::operator-(Matrix matrix0) {
+    int r{this->r}, c{this->c};
+    int r0{matrix0.r}, c0{matrix0.c};
+    if(r0 != r or c0 != c) {
+        cout<<"Dimension Error: -(r1 != r2 or c1 != c2)";
+        throw 101;
+    };
+
+    Matrix result(r, c);
+    rpt(j, 0, r) {
+        rpt(k, 0, c)
+            result[j][k] = this->matrix[j][k] - matrix0[j][k];
+    };
+
+    return result;
+}
+
+Matrix Matrix::operator*(Matrix matrix0) {
+    int r{this->r}, c{this->c};
+    int r0{matrix0.r}, c0{matrix0.c};
+    if(c != r0) {
+        cout<<"Dimension Error: *(c1 != r2)"<<endl;
+        throw 101;
+    };
+
+    Matrix result(r, c0);
+    rpt(l, 0, r) {
+        rpt(j, 0, c0) {
+            Complex sum(0, 0);
+
+            rpt(k, 0, c0)
+                sum = sum + (this->matrix[l][k] * matrix0[k][j]);
+            result[l][j] = sum;
+        };
+    };
+
+    return result;
+}
+
+/*Matrix Matrix::operator/(Matrix matrix0) {
+    Matrix it(this->r, this->c);
+    it.matrix = this->matrix;
+    Matrix inv = matrix0.inverse();
+    Matrix result = this->matrix * inv;
+    return result;
+}*/
+
 
 int main() {
     Matrix matrix(0, 0);
     matrix.print();
 
-    vc eig = eigenvalues(matrix);
-    rpt(j, 0, eig.size())
-        cout<<eig[j]<<", ";
-    cout<<"\n"<<endl;
-
-    Matrix result = eigenvec(matrix);
+    Matrix result = ref(matrix);
     result.print();
 
     cin.get();
